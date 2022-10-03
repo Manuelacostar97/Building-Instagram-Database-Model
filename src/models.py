@@ -15,58 +15,89 @@ Base = declarative_base()
 
 
 class Usuarios(Base):
-    __tablename__ = 'usuario'
+    __tablename__ = 'usuarios'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     lname = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
+    username = Column(String(250), nullable=False)
     password = Column(String(250), nullable=False)
+    phone = Column(String(250))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    favorites_key = Column(Integer, ForeignKey('favorites.id'))
-    favorites = relationship("Favorites")
+    favoritos = relationship("Favoritos")
+    seguidores = relationship("Seguidores")
+    post = relationship("Post")
+    comentarios = relationship("Comentarios")
 
-class Planetas(Base):
-    __tablename__ = 'planetas'
+    def update(self):
+        return {}
+
+class Favoritos(Base):
+    __tablename__ = 'favoritos'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-    diameter = Column(String(250), nullable=False)
-    gravity = Column(String(250), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    favorites_key = Column(Integer, ForeignKey('favorites.id'))
-    favorites = relationship("Favorites")
+    post_id = Column(Integer, ForeignKey("post.id"))
+    comentarios_id = Column(Integer, ForeignKey('comentarios.id'))
 
-class Personajes(Base):
-    __tablename__ = 'personajes'
+    def update(self):
+        return {}    
+
+class Post(Base):
+    __tablename__ = 'post'
+    # Here we define columns for the table person
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    usuario_id = Column(Integer, ForeignKey('usuarios.id'), nullable=False)
+    favoritos = relationship("Favoritos")
+
+    def update(self):
+        return {}
+
+class Media(Base):
+    __tablename__ = 'media'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-    gender = Column(String(250), nullable=False)
-    height = Column(String(250), nullable=False)
+    url = Column(String(250), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    favorites_key = Column(Integer, ForeignKey('favorites.id'))
-    favorites = relationship("Favorites")
+    post_id = Column(Integer, ForeignKey('post.id'), nullable=False) 
 
-class Favorites(Base):
-    __tablename__ = 'favorites'
-    # Here we define columns for the table person
+    def update(self):
+        return {}
+
+class Comentarios(Base):
+    __tablename__ = 'comentarios'
+    # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    content = Column(String(250), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    post_id = Column(Integer, ForeignKey('post.id'), nullable=False)
+    favoritos = relationship("Favoritos")
+
+    def update(self):
+        return {}
+
+class Seguidores(Base):
+    __tablename__ = 'seguidores'
+    # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    personajes = relationship("Personajes")
-    usuarios = relationship("Usuarios")
-    planetas = relationship("Planetas")
-    user_id = Column(Integer, ForeignKey('usuario.id'))
-    pers_id = Column(Integer, ForeignKey('personajes.id'))
-    planet_id = Column(Integer, ForeignKey('planetas.id'))
+    id_from_user= Column(Integer, ForeignKey('usuarios.id'), nullable=False)
+    id_to_user= Column(Integer, ForeignKey('usuarios.id'), nullable=False)
+
     
     def serializer(self):
         return {}

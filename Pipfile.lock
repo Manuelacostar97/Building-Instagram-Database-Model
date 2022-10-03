@@ -26,10 +26,10 @@
         },
         "pygraphviz": {
             "hashes": [
-                "sha256:411ae84a5bc313e3e1523a1cace59159f512336318a510573b47f824edef8860"
+                "sha256:457e093a888128903251a266a8cc16b4ba93f3f6334b3ebfed92c7471a74d867"
             ],
-            "markers": "python_version >= '3.6'",
-            "version": "==1.6"
+            "markers": "python_version >= '3.8'",
+            "version": "==1.10"
         },
         "sqlalchemy": {
             "hashes": [
